@@ -92,30 +92,46 @@ Carli <- function(x, y, na.rm = TRUE, ze.rm = TRUE){
 CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL, 
                      wVar = NULL) 
 {
-  if (!is.factor(data[, groupVar])) 
+  if (!is.factor(data[, groupVar])) {
     data[, groupVar] <- factor(data[, groupVar])
-  if (is.null(consumVar) | missing(consumVar)) 
+  }
+  if (is.null(consumVar) | missing(consumVar)) {
     warning("No consumer group variable was specified so an index was calculated for each elementary group.", 
             call. = FALSE)
+  }
   if (is.null(wVar)) {
     warning("No weight variable was specified so all elements have been given a weight = 1", 
             call. = FALSE)
     ww <- rep(1, nrow(data))
-  }
-  else {
+  } else {
     ww <- data[, wVar]
   }
-  group <- levels(data[, groupVar])
-  #ind <- array(NA, length(group), 1)
-  ind <- rep(NA, length(group))
-  for (i in 1:length(group)) {
-    d <- data[, groupVar] == group[i]
+  
+  # Check all weights are equal within groups
+  wi <- ave(ww, data[, groupVar], FUN = mean)
+  if (!all(wi == ww)){
+    warning("Not all weights were equal within groups!! A mean weight is being used")
+  }
+  
+  # Check weights add to 1
+  wg <- tapply(wi, data[, groupVar], FUN=mean)
+  while (!isTRUE(all.equal(sum(wg), 1))){
+    warning("Elementary group weights did not add to one and have been scaled.")
+    wg <- wg/ sum(wg)
+  }
+  groups <- levels(data[, groupVar])
+  
+  #ind <- array(NA, length(groups), 1)
+  ind <- rep(NA, length(groups))
+  for (i in 1:length(groups)) {
+    d <- data[, groupVar] == groups[i]
     if (type == "jevons") {
       Pi <- Jevons(data[d, baseVar], data[d, pVar])}
     if (type == "carli") {
       Pi <- Carli(data[d, baseVar], data[d, pVar])}
     if (type == "dutot") {
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
+    
     wi <- mean(ww[d])
     ind[i] <- Pi * wi
   }
