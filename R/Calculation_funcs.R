@@ -113,6 +113,8 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     warning("Not all weights were equal within groups!! A mean weight is being used")
   }
   
+  ### Lager sortering inn her eller lage en id
+  
   # Check weights add to 1
   wg <- tapply(wi, data[, groupVar], FUN=mean)
   while (!isTRUE(all.equal(sum(wg), 1))){
@@ -120,6 +122,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     wg <- wg/ sum(wg)
   }
   groups <- levels(data[, groupVar])
+  
   
   #ind <- array(NA, length(groups), 1)
   ind <- rep(NA, length(groups))
@@ -132,8 +135,9 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     if (type == "dutot") {
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
     
-    wi <- mean(ww[d])
-    ind[i] <- Pi * wi
+    #wi <- mean(ww[d])
+    #ind[i] <- Pi * wi ##### Skal dette være wg???
+    ind[i] <- Pi * wg[i] ### check this - legge inn sortering først!
   }
   if (!is.null(consumVar) | !missing (consumVar)) {
     tab <- unique(data.frame(data[, groupVar], data[, consumVar]))
@@ -143,7 +147,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     }
     if (any(duplicated(tab[, 1]))) 
       stop("Some elementary groups contain elements that are found in several consumer groups. These should be exclusive.")
-    return(tapply(ind, tab[, 2], sum))
+    return(tapply(ind, tab[, 2], sum)) ### ikke vektet til 1!!
   }
   else {
     return(ind)
