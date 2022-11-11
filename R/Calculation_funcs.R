@@ -92,6 +92,7 @@ Carli <- function(x, y, na.rm = TRUE, ze.rm = TRUE){
 CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL, 
                      wVar = NULL) 
 {
+  # change to factor
   if (!is.factor(data[, groupVar])) {
     data[, groupVar] <- factor(data[, groupVar])
   }
