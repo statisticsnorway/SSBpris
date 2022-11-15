@@ -95,34 +95,67 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
   if (!is.factor(data[, groupVar])) {
     data[, groupVar] <- factor(data[, groupVar])
   }
+  
+  if (any(is.na(data[, groupVar]))) 
+    warning("groupVar has missing values. These observations will be removed.", call. = FALSE)
+  data <- data[!is.na(data[, groupVar]),]
+  
+  
   if (is.null(consumVar) | missing(consumVar)) {
     warning("No consumer group variable was specified so an index was calculated for each elementary group.", 
             call. = FALSE)
-  }
+  } else {
+    if (any(is.na(data[, consumVar]))) 
+    warning("consumVar has missing values. These observations will be removed.", call. = FALSE)
+    data <- data[!is.na(data[, consumVar]),]
+    }
+  
+  
   if (is.null(wVar)) {
     warning("No weight variable was specified so all elements have been given a weight = 1", 
             call. = FALSE)
-    ww <- rep(1, nrow(data))
+    data[, wVar] <- rep(1, nrow(data))
   } else {
-    ww <- data[, wVar]
+    if (any(is.na(data[, wVar]))) 
+      warning("wVar has missing values. These observations will be removed.", call. = FALSE)
+    data <- data[!is.na(data[, wVar]),]
+    
   }
   
+  if (is.null(data)) {
+    stop("Dataset is empty")
+  }else{ 
+    if (nrow(data)==0)
+    stop("There are no usable observations in the dataset")
+  }
+  
+  data <- droplevels(data) #removing unused levels
+  
+  ww <- data[, wVar]
+  
   # Check all weights are equal within groups
-  wi <- ave(ww, data[, groupVar], FUN = mean)
+  wi <- ave(ww, data[, groupVar], FUN = mean) #wi has same length as ww
   if (!all(wi == ww)){
     warning("Not all weights were equal within groups!! A mean weight is being used")
   }
   
-  ### Lager sortering inn her eller lage en id
   
   # Check weights add to 1
   wg <- tapply(wi, data[, groupVar], FUN=mean)
+  
+  # wg has length equal to the number of levels in groupVar 
+  # (all levels are actually occuring in the dataset because unused levels have been dropped)
+  # wg is ordered by groupVar
+  # wg has names equal to the levels of groupVar
+  
+  #Scaling wg
   while (!isTRUE(all.equal(sum(wg), 1))){
     warning("Elementary group weights did not add to one and have been scaled.")
     wg <- wg/ sum(wg)
   }
-  groups <- levels(data[, groupVar])
   
+  groups <- levels(data[, groupVar])
+  # groups is ordered by groupVar
   
   #ind <- array(NA, length(groups), 1)
   ind <- rep(NA, length(groups))
@@ -135,23 +168,29 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     if (type == "dutot") {
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
     
-    #wi <- mean(ww[d])
-    #ind[i] <- Pi * wi ##### Skal dette være wg???
-    ind[i] <- Pi * wg[i] ### check this - legge inn sortering først!
+    ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
   }
+  names(ind) <- groups
+  
   if (!is.null(consumVar) | !missing (consumVar)) {
-    tab <- unique(data.frame(data[, groupVar], data[, consumVar]))
+    tab <- unique(data.frame(data[, groupVar], data[, consumVar])) #only the levels actually present in data will be in tab
     tab <- tab[order(tab[, 1]), ]
-    if (length(tab[,2]) != length(ind)){
-      ind <- ind[!is.na(ind)]
-    }
+    
     if (any(duplicated(tab[, 1]))) 
       stop("Some elementary groups contain elements that are found in several consumer groups. These should be exclusive.")
-    return(tapply(ind, tab[, 2], sum)) ### ikke vektet til 1!!
+   
+    #If no level of groupVar is duplicated, the number of rows in tab equals the number of levels in groupVar
+    #so ind and tab[,2] have the same length
+    
+    #Could have missing or invalid weights/prices (NA, Inf, -Inf), or sumwg=0
+    
+    sumind <- tapply(ind, tab[, 2], sum)
+    sumwg <- tapply(wg, tab[, 2], sum)
+    ind <- sumind/sumwg
+    
   }
-  else {
+  
     return(ind)
-  }
 }
 
 
