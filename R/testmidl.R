@@ -57,4 +57,3 @@ x <- CalcInd(data=testdata, baseVar="b1", pVar="p1", type="jevons", groupVar="va
 
 x
 
-
