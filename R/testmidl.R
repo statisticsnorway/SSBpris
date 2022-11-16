@@ -55,5 +55,4 @@ x <- CalcInd(data=juks, baseVar="b1", pVar="p1", type="jevons", groupVar="varenr
 x <- CalcInd(data=testdata, baseVar="b1", pVar="p1", type="jevons", groupVar="varenr", consumVar = "coicop", 
         )
 
-x
 
