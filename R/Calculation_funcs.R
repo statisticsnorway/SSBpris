@@ -117,9 +117,9 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
             call. = FALSE)
     data[, wVar] <- rep(1, nrow(data))
   } else {
-    if (any(is.na(data[, wVar]))) 
-      warning("wVar has missing values. These observations will be removed.", call. = FALSE)
-    data <- data[!is.na(data[, wVar]),]
+    if (any(!is.finite(data[, wVar]))) #is.finite is FALSE for NA, NaN, Inf, -Inf 
+      warning("wVar has missing or invalid values. These observations will be removed.", call. = FALSE)
+    data <- data[is.finite(data[, wVar]),]
     
   }
   
@@ -130,8 +130,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     stop("There are no usable observations in the dataset")
   }
   
-  data <- droplevels(data) #removing unused levels
-  
+  data <- droplevels(data) #removing unused levels to ensure ind and tab below have same length
   ww <- data[, wVar]
   
   # Check all weights are equal within groups
@@ -170,6 +169,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
     
     ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
+    #ind[i] <- Pi
   }
   names(ind) <- groups
   
@@ -183,11 +183,12 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     #If no level of groupVar is duplicated, the number of rows in tab equals the number of levels in groupVar
     #so ind and tab[,2] have the same length
     
-    #Could have missing or invalid weights/prices (NA, Inf, -Inf), or sumwg=0
+    #Could still have missing or invalid prices (NA, NaN, Inf, -Inf), or sumwg=0
     
     sumind <- tapply(ind, tab[, 2], sum)
-    sumwg <- tapply(wg, tab[, 2], sum)
-    ind <- sumind/sumwg
+    #sumind <- tapply(wg*ind, tab[, 2], sum)
+    sumwg <- tapply(wg, tab[, 2], sum) #Sum weights in each consumer group
+    ind <- sumind/sumwg #Dividing by sumwg is the same as scaling weights to one
     
   }
   
