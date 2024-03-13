@@ -1,13 +1,13 @@
 Package: SSBpris
 Type: Package
 Title: Tools for price index calculations
-Version: 0.1.2
+Version: 0.1.3
 Date: 2022-02-21
 Authors@R: c(
   person("Øyvind", "Langsrud", email="oyl@ssb.no", role = c("aut")), 
   person("Susie", "Jentoft", email = "susie.jentoft@ssb.no", role = "aut"), 
   person("Anne", "Vedø", email = "anne.vedo@ssb.no", role=c("aut", "cre")),
-  person("SSB", role="cph"))
+  person("SSB", role="cph")
   )
 Maintainer: Anne Vedø <anne.vedo@ssb.no>
 Depends: R (>= 2.0.0)
