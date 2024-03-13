@@ -1,15 +1,19 @@
 Package: SSBpris
 Type: Package
 Title: Tools for price index calculations
-Version: 0.1.1
+Version: 0.1.2
 Date: 2022-02-21
-Author: Øyvind Langsrud, Susie Jentoft
-Maintainer: Susie Jentoft <susie.jentoft@ssb.no>
+Authors@R: c(
+  person("Øyvind", "Langsrud", email="oyl@ssb.no", role = c("aut")), 
+  person("Susie", "Jentoft", email = "susie.jentoft@ssb.no", role = "aut"), 
+  person("Anne", "Vedø", email = "anne.vedo@ssb.no", role=c("aut", "cre"))
+  )
+Maintainer: Anne Vedø <anne.vedo@ssb.no>
 Depends: R (>= 2.0.0)
 Description: Functions to calculate indexes and their variances and allocate samples for price indices.
 Encoding: UTF-8
-License: GPL-2
-RoxygenNote: 7.2.0
+License: MIT + file LICENSE
+RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 Suggests: 
     testthat (>= 3.0.0)
