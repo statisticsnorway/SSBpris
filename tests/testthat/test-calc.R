@@ -1,14 +1,14 @@
 # Testing of price index calculations
-#source("R/Calculation_funcs.R")
 
-test_that("CalcInd returns correct value", {
+test_that("CalcInd returns correct value in consumVar groups", {
   data(priceData)
   suppressWarnings(
   ind <- CalcInd(data = priceData, baseVar = "b1", pVar = "p1", groupVar = "varenr", wVar = "weight", 
-                 consumVar = "coicop", type = "dutot")
+                 consumVar = "nace3", type = "dutot")
   )
-  expect_equal(as.numeric(ind[1]), 30.06709, tolerance = 1E-4)
+  expect_equal(as.numeric(ind[1]), 1.028245, tolerance = 1E-4)
 })
+
 
 test_that("CalcInd throws a warning if weights must be adjusted, otherwise no warning", {
   priceData <- priceData[priceData$varenr %in% c(1,2),]
