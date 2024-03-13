@@ -14,7 +14,7 @@ Depends: R (>= 2.0.0)
 Description: Functions to calculate indexes and their variances and allocate samples for price indices.
 Encoding: UTF-8
 License: MIT + file LICENSE
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Config/testthat/edition: 3
 Suggests: 
     testthat (>= 3.0.0)
