@@ -168,12 +168,12 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     if (type == "dutot") {
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
     
-    ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
-    #ind[i] <- Pi
+    #ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
+    ind[i] <- Pi
   }
   names(ind) <- groups
   
-  if (!is.null(consumVar) | !missing (consumVar)) {
+  if (!is.null(consumVar) & !missing (consumVar)) {
     tab <- unique(data.frame(data[, groupVar], data[, consumVar])) #only the levels actually present in data will be in tab
     tab <- tab[order(tab[, 1]), ]
     
