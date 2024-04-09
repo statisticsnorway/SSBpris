@@ -186,7 +186,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     #Could still have missing or invalid prices (NA, NaN, Inf, -Inf), or sumwg=0
     
     #sumind <- tapply(ind, tab[, 2], sum)
-    sumind <- tapply(wg*ind, tab[, 2], sum)
+    sumind <- tapply(wg*ind, tab[, 2], sum) #Weighted sum of indexes
     sumwg <- tapply(wg, tab[, 2], sum) #Sum weights in each consumer group
     ind <- sumind/sumwg #Dividing by sumwg is the same as scaling weights to one
     
