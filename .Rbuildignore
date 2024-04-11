@@ -7,3 +7,5 @@
 ^\.github$
 ^renv$
 ^renv.lock
+LICENSE.md
+SECURITY.md
