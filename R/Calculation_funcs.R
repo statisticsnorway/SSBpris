@@ -165,12 +165,12 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     if (type == "dutot") {
       Pi <- Dutot(data[d, baseVar], data[d, pVar])}
     
-    ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
-    #ind[i] <- Pi
+    #ind[i] <- Pi * wg[groups[i]] #Pi is multiplied by corresponding weight - vil vi ha det?
+    ind[i] <- Pi
   }
   names(ind) <- groups
   
-  if (!is.null(consumVar) | !missing (consumVar)) {
+  if (!is.null(consumVar) & !missing (consumVar)) {
     tab <- unique(data.frame(data[, groupVar], data[, consumVar])) #only the levels actually present in data will be in tab
     tab <- tab[order(tab[, 1]), ]
     
@@ -182,8 +182,8 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
     
     #Could still have missing or invalid prices (NA, NaN, Inf, -Inf), or sumwg=0
     
-    sumind <- tapply(ind, tab[, 2], sum)
-    #sumind <- tapply(wg*ind, tab[, 2], sum)
+    #sumind <- tapply(ind, tab[, 2], sum)
+    sumind <- tapply(wg*ind, tab[, 2], sum) #Weighted sum of indexes
     sumwg <- tapply(wg, tab[, 2], sum) #Sum weights in each consumer group
     ind <- sumind/sumwg #Dividing by sumwg is the same as scaling weights to one
     

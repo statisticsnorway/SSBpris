@@ -1,3 +1,4 @@
+
 # Testing of price index calculations
 
 test_that("CalcInd returns correct value in consumVar groups", {

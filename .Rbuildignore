@@ -1,3 +1,4 @@
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
@@ -6,3 +7,4 @@
 ^\.github$
 LICENSE.md
 SECURITY.md
+
