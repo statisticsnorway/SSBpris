@@ -67,7 +67,8 @@ Also a quote using `>`:
 
 
 ```{r} 
-
+library(SSBpris)
+data("priceData")
 
 CalcInd(data=priceData, baseVar="b1", pVar="p1", type="jevons", groupVar="varenr", consumVar = NULL, wVar = "weight") 
 ```
