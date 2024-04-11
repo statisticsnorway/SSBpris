@@ -2,9 +2,6 @@
 
 export(CalcInd)
 export(CalcIndS2)
-export(Carli)
-export(Dutot)
 export(FillStrataInd)
-export(Jevons)
 export(SpecialRound)
 export(SwapStrataInd)

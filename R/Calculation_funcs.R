@@ -5,7 +5,6 @@
 #' @param y Vector of prices in the statistical time period. 
 #'
 #' @return Price index (L-type)
-#' @export
 Jevons <- function(x, y){
   z <- y / x
   zz <- exp(mean(log(z[is.finite(log(z))]), na.rm=T)) #Tian Yi Stack overflow - ta ut 0 og NA verdi
@@ -20,7 +19,6 @@ Jevons <- function(x, y){
 #' @param ze.rm Logical on whether to remove missing values for the instrument variable for the calculations.
 #'
 #' @return Price index (L-type)
-#' @export
 Dutot <- function(x, y, na.rm = TRUE, ze.rm = TRUE){
   if (ze.rm) {
     zero <- (x != 0)
@@ -43,7 +41,6 @@ Dutot <- function(x, y, na.rm = TRUE, ze.rm = TRUE){
 #' @param ze.rm Logical on whether to remove missing values for the instrument variable for the calculations. 
 #'
 #' @return Price index (L-type)
-#' @export
 Carli <- function(x, y, na.rm = TRUE, ze.rm = TRUE){
   if (ze.rm) {
     zero <- (x != 0)
@@ -134,7 +131,7 @@ CalcInd <- function (data, baseVar, pVar, type, groupVar, consumVar = NULL,
   ww <- data[, wVar]
   
   # Check all weights are equal within groups
-  wi <- ave(ww, data[, groupVar], FUN = mean) #wi has same length as ww
+  wi <- stats::ave(ww, data[, groupVar], FUN = mean) #wi has same length as ww
   if (!all(wi == ww)){
     warning("Not all weights were equal within groups!! A mean weight is being used")
   }
