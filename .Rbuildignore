@@ -1,6 +1,9 @@
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
+^renv$
+^renv.lock
