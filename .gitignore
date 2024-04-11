@@ -37,8 +37,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-
+renv/
+renv.lock
 .Rproj.user
+.Rprofile
 
 docs/
 
